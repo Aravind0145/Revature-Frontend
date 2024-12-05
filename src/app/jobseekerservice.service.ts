@@ -24,6 +24,12 @@ export class JobseekerserviceService {
   saveResume(resume: Resume, jobseekerId: number): Observable<Resume> {
     return this.http.post<Resume>(`${this.apiUrl}/jobseeker/jobseekerresume/${jobseekerId}`, resume);
   }
+
+  // Inside the JobseekerserviceService
+checkResumeExistence(jobseekerId: number): Observable<boolean> {
+  return this.http.get<boolean>(`${this.apiUrl}/jobseeker/jobseekerresume/check/${jobseekerId}`);
+}
+
   
 
 

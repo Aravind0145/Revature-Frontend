@@ -59,7 +59,7 @@
   <div class="resume-container">
     <div *ngIf="resume; else noData" class="resume-box">
    
-<!-- Display uploaded profile photo -->
+
 <img *ngIf="resume.profilePhoto" [src]="resume.profilePhoto" alt="Profile Photo" class="profile-photo" />
       <p>{{ resume.firstName }} {{ resume.middleName }} {{ resume.lastName }}</p>
       <p>{{ resume.graduation }}</p>

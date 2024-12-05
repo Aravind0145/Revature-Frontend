@@ -35,6 +35,9 @@ export class ForgotpasswordComponent {
           error => {
             this.message = 'Error updating password. Please try again.';
             console.error(error);
+            alert('Incorrect email please check it');
+            this.email = '';
+          this.password = '';
           }
         );
     } else {

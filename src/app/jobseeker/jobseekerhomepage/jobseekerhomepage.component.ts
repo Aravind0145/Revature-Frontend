@@ -37,6 +37,7 @@ export class JobseekerhomepageComponent implements OnInit {
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
       this.fullName = params['fullName'] || 'Guest';
+      console.log(this.fullName);
       this.id = params['id'] ? +params['id'] : null;
 
       if (this.id !== null) {

@@ -54,7 +54,9 @@ export class EmploginComponent {
       },
       error => {
         console.error('Login error:',error);
-        alert('Login failed');
+        alert('Incorrect mail and password Please check! ');
+        this.email = '';
+      this.password = '';
       }
     );
   }

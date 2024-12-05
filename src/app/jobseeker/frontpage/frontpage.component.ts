@@ -11,6 +11,7 @@ export class FrontpageComponent {
   showLoginForm: boolean = false; // Controls login form visibility
   email: string = '';
   password: string = '';
+  isLoggedIn: boolean = false;
 
   toggleLoginForm(): void {
     this.showLoginForm = !this.showLoginForm; // Toggle the form visibility
@@ -56,6 +57,15 @@ export class FrontpageComponent {
       this.password = '';
       }
     );
+  }
+  onSearchClick(event: Event): void {
+    event.preventDefault(); // Prevent form submission if needed
+    if (!this.isLoggedIn) {
+      alert('Please login');
+    } else {
+      console.log('Proceeding with search...');
+      // Add logic for search functionality here
+    }
   }
 
 

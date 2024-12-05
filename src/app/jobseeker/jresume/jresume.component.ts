@@ -14,6 +14,7 @@ export class JresumeComponent implements OnInit {
   resume: Resume | null = null;
 
   jobseekerId: number | null = null; // Declare id to store the query param
+  resumeExists: boolean = false; // Track if resume already exists
 
   // Define form fields as class properties
   resumeId: number | null = null;
@@ -88,6 +89,7 @@ export class JresumeComponent implements OnInit {
       });
     }
   }
+
   ngOnInit(): void {
     // Retrieve query parameters from the route
     this.route.queryParams.subscribe(params => {
@@ -96,17 +98,38 @@ export class JresumeComponent implements OnInit {
   
       // Ensure jobseekerId is available before making a service call
       if (this.jobseekerId) {
-        // Fetch resume details using jobseekerId
-        this.resumeService.getResumeById(this.jobseekerId).subscribe({
-          next: (data: Resume) => {
-            this.resume = data;
-            this.resumeId = data.id || null; // Extract resumeId from the response
-            console.log('Resume details fetched successfully:', data);
+        // Check if resume already exists for this jobseeker
+        this.resumeService.checkResumeExistence(this.jobseekerId).subscribe({
+          next: (exists: boolean) => {
+            this.resumeExists = exists;
+            if (this.resumeExists) {
+              alert('You have already created a resume.');
+              this.router.navigate(['/jobseeker/jobseekerhomepage'], {
+                queryParams: { fullName: this.fullName, id: this.jobseekerId }
+              });
+              // Optionally redirect or disable form inputs if needed
+            } else {
+              console.log('No resume found, ready to create a new one');
+            }
           },
           error: (error) => {
-            console.error('Error fetching resume details:', error);
+            console.error('Error checking resume existence:', error);
           }
         });
+
+        // Fetch resume details if a resume exists
+        if (!this.resumeExists) {
+          this.resumeService.getResumeById(this.jobseekerId).subscribe({
+            next: (data: Resume) => {
+              this.resume = data;
+              this.resumeId = data.id || null; // Extract resumeId from the response
+              console.log('Resume details fetched successfully:', data);
+            },
+            error: (error) => {
+              console.error('Error fetching resume details:', error);
+            }
+          });
+        }
       } else {
         console.warn('Jobseeker ID is missing in query parameters.');
       }
@@ -119,6 +142,9 @@ export class JresumeComponent implements OnInit {
     if (this.jobseekerId === null) {
       alert('Job Seeker ID is missing!');
       return;
+    } else if (this.resumeExists) {
+      alert('You have already created a resume.');
+      return; // Prevent further action if resume already exists
     }
 
     // Create resume object based on form data, including the jobseekerId
